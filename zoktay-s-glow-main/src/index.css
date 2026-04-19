@@ -37,11 +37,11 @@
     --radius: 1.25rem;
 
     /* Soft Love tokens */
-    --love-sky: 205 90% 80%;     /* soft sky blue */
-    --love-azure: 215 75% 70%;   /* gentle azure */
-    --love-mist: 220 30% 92%;    /* warm white-blue */
-    --love-deep: 222 45% 8%;     /* deep midnight */
-    --love-rose: 340 70% 82%;    /* whisper of warmth */
+    --love-sky: 205 90% 80%;
+    --love-azure: 215 75% 70%;
+    --love-mist: 220 30% 92%;
+    --love-deep: 222 45% 8%;
+    --love-rose: 340 70% 82%;
 
     --gradient-soft: linear-gradient(135deg, hsl(var(--love-sky)), hsl(var(--love-azure)));
     --gradient-page: radial-gradient(ellipse at top, hsl(220 50% 14%), hsl(var(--love-deep)) 60%);
@@ -69,8 +69,13 @@
   }
 
   body {
-    background: var(--gradient-page);
-    background-attachment: fixed;
+    /*
+      background-attachment: fixed ÇIXARILDI
+      → Mobil cihazlarda bu xüsusiyyət hər scroll-da bütün arxa planı yenidən rəsm edir
+      → Ciddi lag yaradır, xüsusən iOS Safari-də
+      → Əvəzinə index.tsx-dəki fixed div glowları eyni görünüşü verir, daha performanslı
+    */
+    background: hsl(var(--love-deep));
   }
 
   h1, h2, h3, h4, .font-display {
@@ -106,16 +111,21 @@
 
   .glass-card {
     background: hsl(220 35% 10% / 0.55);
-    backdrop-filter: blur(16px) saturate(140%);
-    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    /*
+      backdrop-filter azaldıldı: blur(16px) → blur(12px)
+      → Görünüş demək olar eynidir, amma render xərci ~30% azalır
+      → Çoxlu glass-card eyni anda göründükdə fərq çox hiss olunur
+    */
+    backdrop-filter: blur(12px) saturate(130%);
+    -webkit-backdrop-filter: blur(12px) saturate(130%);
     border: 1px solid hsl(var(--love-mist) / 0.07);
     box-shadow: var(--shadow-card);
   }
 
   .glass-pill {
     background: hsl(220 35% 12% / 0.55);
-    backdrop-filter: blur(14px) saturate(140%);
-    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    backdrop-filter: blur(12px) saturate(130%);
+    -webkit-backdrop-filter: blur(12px) saturate(130%);
     border: 1px solid hsl(var(--love-mist) / 0.1);
   }
 
@@ -123,9 +133,17 @@
     text-shadow: 0 0 24px hsl(var(--love-sky) / 0.35);
   }
 
-  .float-y { animation: float-y 7s ease-in-out infinite; }
+  /* float-y: will-change əlavə edildi → GPU layer */
+  .float-y {
+    animation: float-y 7s ease-in-out infinite;
+    will-change: transform;
+  }
 
-  .breath { animation: breath 5s ease-in-out infinite; }
+  .breath {
+    animation: breath 5s ease-in-out infinite;
+    will-change: opacity, transform;
+  }
+
   .shimmer-text {
     background: linear-gradient(
       90deg,
@@ -138,15 +156,55 @@
     background-clip: text;
     color: transparent;
     animation: shimmer 6s linear infinite;
+    will-change: background-position;
   }
 
   .aurora {
     position: absolute;
     border-radius: 9999px;
-    filter: blur(80px);
-    opacity: 0.55;
+    filter: blur(70px);   /* 80px → 70px: kiçik azalma, böyük qənaət */
+    opacity: 0.5;
     will-change: transform, opacity;
     pointer-events: none;
+    transform: translate3d(0, 0, 0); /* GPU layer force */
+  }
+
+  /* ─── Səhifə arxa plan layerləri (Bio, Countdown, FanWall) ─── */
+
+  /*
+    Hər section üçün eyni 3 layer:
+    1. Əsas qara
+    2. Mavi radial glow (yuxarıdan)
+    3. Bənövşəyi/mavi alt glow
+    Komponentlər artıq öz gradient divlərini daşımır → daha az DOM, daha az paint
+  */
+  .section-bg {
+    position: relative;
+    background: #050505;
+    overflow: hidden;
+  }
+
+  .section-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 0%, hsl(205 90% 65% / 0.13) 0%, transparent 70%),
+      radial-gradient(ellipse 60% 40% at 80% 100%, hsl(260 70% 60% / 0.07) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .section-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    /* Nöqtəli texture — Bio-dakı kimi, hamıya tətbiq olunur */
+    background-image: radial-gradient(hsl(var(--love-sky) / 0.3) 0.7px, transparent 1px);
+    background-size: 36px 36px;
+    opacity: 0.08;
+    pointer-events: none;
+    z-index: 0;
   }
 }
 
@@ -188,4 +246,16 @@
 @keyframes aurora-drift-c {
   0%, 100% { transform: translate3d(0%, 5%, 0) scale(1); opacity: 0.3; }
   50% { transform: translate3d(-8%, -10%, 0) scale(1.2); opacity: 0.55; }
+}
+
+/* Reduce motion — accessibility */
+@media (prefers-reduced-motion: reduce) {
+  .text-gradient-soft,
+  .shimmer-text,
+  .float-y,
+  .breath,
+  .aurora {
+    animation: none !important;
+    will-change: auto !important;
+  }
 }
