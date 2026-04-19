@@ -60,22 +60,17 @@
   }
 
   html, body {
-    @apply bg-background text-foreground;
     font-family: 'Inter', 'Syne', system-ui, -apple-system, sans-serif;
     overflow-x: hidden;
-    background: hsl(var(--love-deep));
+    background: #050505 !important;
+    color: hsl(var(--foreground));
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
 
-  body {
-    /*
-      background-attachment: fixed ÇIXARILDI
-      → Mobil cihazlarda bu xüsusiyyət hər scroll-da bütün arxa planı yenidən rəsm edir
-      → Ciddi lag yaradır, xüsusən iOS Safari-də
-      → Əvəzinə index.tsx-dəki fixed div glowları eyni görünüşü verir, daha performanslı
-    */
-    background: hsl(var(--love-deep));
+  /* Bütün section-lar şəffaf — arxa plan yalnız body-dən gəlir */
+  section {
+    background: transparent !important;
   }
 
   h1, h2, h3, h4, .font-display {
