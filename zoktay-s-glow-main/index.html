@@ -11,18 +11,118 @@
     <meta property="og:description" content="ZOKTAY fanatları üçün ultra-modern soft love təcrübəsi." />
     <meta property="og:type" content="website" />
     <meta property="og:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
-
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:image" content="https://lovable.dev/opengraph-image-p98pqg.png" />
 
+    <!-- Şriftlər: preconnect + preload əsas şrift faylı üçün -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+    <!-- display=block: şrift gəlməmiş heç nə göstərilmir, layout shift olmur -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,400;9..144,500&family=Inter:wght@300;400;500;600&display=block"
+      rel="stylesheet"
+    />
+
+    <style>
+      /*
+        Səhifə tam yüklənənə qədər göstərilən loading ekranı.
+        React mount olandan sonra JS bu ekranı gizlədir.
+        Beləliklə istifadəçi yarımçıq render görmür.
+      */
+      #app-loader {
+        position: fixed;
+        inset: 0;
+        z-index: 9999;
+        background: #050505;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+        gap: 16px;
+        transition: opacity 0.4s ease, visibility 0.4s ease;
+      }
+      #app-loader.hidden {
+        opacity: 0;
+        visibility: hidden;
+        pointer-events: none;
+      }
+      .loader-dot {
+        display: flex;
+        gap: 8px;
+      }
+      .loader-dot span {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: hsl(205, 90%, 75%);
+        animation: loader-pulse 1.2s ease-in-out infinite;
+      }
+      .loader-dot span:nth-child(2) { animation-delay: 0.2s; }
+      .loader-dot span:nth-child(3) { animation-delay: 0.4s; }
+      @keyframes loader-pulse {
+        0%, 100% { opacity: 0.2; transform: scale(0.8); }
+        50% { opacity: 1; transform: scale(1); }
+      }
+      .loader-text {
+        font-family: Georgia, serif;
+        font-size: 11px;
+        letter-spacing: 0.4em;
+        text-transform: uppercase;
+        color: hsl(205, 90%, 75%, 0.5);
+      }
+
+      /* Bütün section-ların transparent background-ı —
+         kəsim xəttlərini aradan qaldırır */
+      * { box-sizing: border-box; }
+      html, body, #root {
+        background: #050505 !important;
+        margin: 0;
+        padding: 0;
+      }
+      section {
+        background: transparent !important;
+      }
+    </style>
   </head>
 
   <body>
+    <!-- Loading ekranı — React mount olana qədər görünür -->
+    <div id="app-loader">
+      <div class="loader-dot">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+      <p class="loader-text">zoktay</p>
+    </div>
+
     <div id="root"></div>
+
     <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
     <script type="module" src="/src/main.tsx"></script>
+
+    <script>
+      // React render tamamlananda loader-ı gizlət
+      // requestIdleCallback → render bitdikdən sonra, browser boş olduqda işləyir
+      const hideLoader = () => {
+        const loader = document.getElementById('app-loader');
+        if (loader) loader.classList.add('hidden');
+      };
+
+      // React-in #root-a nə vaxt mount olduğunu izlə
+      const observer = new MutationObserver(() => {
+        const root = document.getElementById('root');
+        if (root && root.children.length > 0) {
+          observer.disconnect();
+          // Kiçik gecikmə — ilk render tam bitsin
+          setTimeout(hideLoader, 150);
+        }
+      });
+
+      observer.observe(document.getElementById('root'), { childList: true });
+
+      // Fallback: hər halda 4 saniyə sonra gizlət
+      setTimeout(hideLoader, 4000);
+    </script>
   </body>
 </html>
