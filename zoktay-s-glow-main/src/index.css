@@ -1,0 +1,191 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* SOFT LOVE design system — calm, pastel, no neon, performant. */
+
+@layer base {
+  :root {
+    --background: 220 35% 6%;
+    --foreground: 220 25% 96%;
+
+    --card: 222 32% 9%;
+    --card-foreground: 220 25% 96%;
+
+    --popover: 222 32% 9%;
+    --popover-foreground: 220 25% 96%;
+
+    --primary: 210 90% 78%;
+    --primary-foreground: 222 40% 10%;
+
+    --secondary: 220 28% 14%;
+    --secondary-foreground: 220 25% 96%;
+
+    --muted: 220 25% 12%;
+    --muted-foreground: 220 15% 70%;
+
+    --accent: 220 28% 16%;
+    --accent-foreground: 220 25% 96%;
+
+    --destructive: 0 65% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 25% 18%;
+    --input: 220 25% 14%;
+    --ring: 210 80% 70%;
+
+    --radius: 1.25rem;
+
+    /* Soft Love tokens */
+    --love-sky: 205 90% 80%;     /* soft sky blue */
+    --love-azure: 215 75% 70%;   /* gentle azure */
+    --love-mist: 220 30% 92%;    /* warm white-blue */
+    --love-deep: 222 45% 8%;     /* deep midnight */
+    --love-rose: 340 70% 82%;    /* whisper of warmth */
+
+    --gradient-soft: linear-gradient(135deg, hsl(var(--love-sky)), hsl(var(--love-azure)));
+    --gradient-page: radial-gradient(ellipse at top, hsl(220 50% 14%), hsl(var(--love-deep)) 60%);
+    --gradient-text: linear-gradient(90deg, hsl(var(--love-mist)), hsl(var(--love-sky)), hsl(var(--love-mist)));
+
+    --shadow-soft: 0 20px 60px -20px hsl(220 80% 50% / 0.25);
+    --shadow-card: 0 1px 0 hsl(0 0% 100% / 0.04) inset, 0 20px 40px -25px hsl(0 0% 0% / 0.6);
+
+    --transition-smooth: cubic-bezier(0.65, 0, 0.35, 1);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  html, body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', 'Syne', system-ui, -apple-system, sans-serif;
+    overflow-x: hidden;
+    background: hsl(var(--love-deep));
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background: var(--gradient-page);
+    background-attachment: fixed;
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: 'Fraunces', 'Playfair Display', Georgia, serif;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+  }
+
+  ::selection {
+    background: hsl(var(--love-sky) / 0.3);
+    color: hsl(var(--love-mist));
+  }
+
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: hsl(var(--love-sky) / 0.25); border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: hsl(var(--love-sky) / 0.5); }
+}
+
+@layer utilities {
+  .text-gradient-soft {
+    background: var(--gradient-text);
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: gradient-flow 8s ease-in-out infinite;
+  }
+
+  .bg-gradient-soft {
+    background: var(--gradient-soft);
+  }
+
+  .glass-card {
+    background: hsl(220 35% 10% / 0.55);
+    backdrop-filter: blur(16px) saturate(140%);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid hsl(var(--love-mist) / 0.07);
+    box-shadow: var(--shadow-card);
+  }
+
+  .glass-pill {
+    background: hsl(220 35% 12% / 0.55);
+    backdrop-filter: blur(14px) saturate(140%);
+    -webkit-backdrop-filter: blur(14px) saturate(140%);
+    border: 1px solid hsl(var(--love-mist) / 0.1);
+  }
+
+  .text-soft-glow {
+    text-shadow: 0 0 24px hsl(var(--love-sky) / 0.35);
+  }
+
+  .float-y { animation: float-y 7s ease-in-out infinite; }
+
+  .breath { animation: breath 5s ease-in-out infinite; }
+  .shimmer-text {
+    background: linear-gradient(
+      90deg,
+      hsl(var(--love-mist) / 0.85) 0%,
+      hsl(var(--love-sky)) 50%,
+      hsl(var(--love-mist) / 0.85) 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: shimmer 6s linear infinite;
+  }
+
+  .aurora {
+    position: absolute;
+    border-radius: 9999px;
+    filter: blur(80px);
+    opacity: 0.55;
+    will-change: transform, opacity;
+    pointer-events: none;
+  }
+}
+
+@keyframes gradient-flow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+@keyframes equalizer {
+  0%, 100% { transform: scaleY(0.3); }
+  50% { transform: scaleY(1); }
+}
+
+@keyframes breath {
+  0%, 100% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.04); }
+}
+
+@keyframes shimmer {
+  0% { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+@keyframes aurora-drift-a {
+  0%, 100% { transform: translate3d(-10%, -8%, 0) scale(1); opacity: 0.45; }
+  50% { transform: translate3d(8%, 6%, 0) scale(1.15); opacity: 0.7; }
+}
+
+@keyframes aurora-drift-b {
+  0%, 100% { transform: translate3d(12%, 10%, 0) scale(1.1); opacity: 0.35; }
+  50% { transform: translate3d(-6%, -4%, 0) scale(0.95); opacity: 0.6; }
+}
+
+@keyframes aurora-drift-c {
+  0%, 100% { transform: translate3d(0%, 5%, 0) scale(1); opacity: 0.3; }
+  50% { transform: translate3d(-8%, -10%, 0) scale(1.2); opacity: 0.55; }
+}
