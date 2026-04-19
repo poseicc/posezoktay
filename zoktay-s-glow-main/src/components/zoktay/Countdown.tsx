@@ -36,24 +36,22 @@ const Countdown = () => {
   ];
 
   return (
-    <section id="countdown" className="relative px-4 py-24 sm:py-32 overflow-hidden bg-[#0a0a0a]">
-      
-      {/* Arxa plan gradienti - qaralığı azaldır və dərinlik verir */}
-      <div className="absolute inset-0 bg-gradient-to-b from-zinc-950 via-zinc-900 to-[#0a0a0a]" />
-      
-      {/* Yüngül mavi glow effekti (tema ilə uyğun) */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,#3b82f630_0%,transparent_70%)]" />
+    /*
+      ÖNCƏKİ: 2 ayrı arxa plan div (gradient + mavi glow)
+      İNDİ: section-bg class → eyni effekt, 0 əlavə DOM element
+    */
+    <section id="countdown" className="section-bg px-4 py-24 sm:py-32">
 
       <div className="relative z-10 mx-auto max-w-5xl">
-        
+
         <div className="glass-card relative overflow-hidden rounded-[2rem] p-8 text-center sm:p-14 border border-white/10">
-          
-          {/* Üst glow */}
+
+          {/* Kart daxili üst glow — saxlanıldı, yüngül */}
           <div
             className="pointer-events-none absolute inset-0"
             style={{
               background:
-                "radial-gradient(ellipse at 50% 20%, hsl(var(--love-sky) / 0.15), transparent 70%)",
+                "radial-gradient(ellipse at 50% 0%, hsl(var(--love-sky) / 0.12), transparent 65%)",
             }}
           />
 
@@ -61,11 +59,11 @@ const Countdown = () => {
             <p className="mb-2 font-body text-[10px] uppercase tracking-[0.6em] text-[hsl(var(--love-sky)/0.8)]">
               18 nisan · happy birthday
             </p>
-            
+
             <h2 className="text-gradient-soft font-display text-4xl italic sm:text-6xl">
               Zoktay Day
             </h2>
-            
+
             <p className="mx-auto mt-4 max-w-md font-body text-sm font-light text-[hsl(var(--love-mist)/0.75)] sm:text-base">
               Büyük gün yaklaşıyor: Işığın doğuşuna geri sayım. 💙
             </p>
@@ -75,7 +73,7 @@ const Countdown = () => {
               {blocks.map((b, i) => (
                 <div
                   key={i}
-                  className="group rounded-2xl border border-[hsl(var(--love-mist)/0.1)] bg-[hsl(var(--love-mist)/0.04)] py-6 backdrop-blur-md transition-all hover:border-[hsl(var(--love-sky)/0.3)] hover:bg-white/5"
+                  className="group rounded-2xl border border-[hsl(var(--love-mist)/0.1)] bg-[hsl(var(--love-mist)/0.04)] py-6 backdrop-blur-sm transition-all hover:border-[hsl(var(--love-sky)/0.3)] hover:bg-white/5"
                 >
                   <div className="text-gradient-soft font-display text-3xl tabular-nums italic sm:text-5xl lg:text-6xl">
                     {b.v.toString().padStart(2, "0")}
