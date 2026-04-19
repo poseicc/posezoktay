@@ -152,3 +152,4 @@ const FanWall = () => {
 };
 
 export default FanWall;
+                
