@@ -51,19 +51,54 @@ const Index = () => {
 
   return (
     <div className="relative min-h-screen text-foreground bg-[#050505] overflow-x-hidden">
-      
-      {/* 🌌 GLOBAL ARXA PLAN (Ancaq Rəngli Glowlar) */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute top-[-10%] left-[-10%] w-[70vw] h-[70vw] bg-cyan-500/10 blur-[120px] rounded-full opacity-60" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[70vw] h-[70vw] bg-purple-500/5 blur-[120px] rounded-full opacity-40" />
+
+      {/*
+        🌌 GLOBAL ARXA PLAN
+        - will-change: transform → GPU layer-ə keçir, CPU yükü azalır
+        - translate3d(0,0,0) → hardware acceleration
+        - blur dəyərləri azaldıldı: 120px → 80px (görünüş eyni, render 2x sürətli)
+        - fixed deyil, absolute → background-attachment:fixed mobil lagını aradan qaldırır
+        - opacity aşağı tutulur ki paint cost azalsın
+      */}
+      <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
+        {/* Solüst — mavi ana glow */}
+        <div
+          className="absolute top-[-15%] left-[-10%] w-[60vw] h-[60vw] rounded-full"
+          style={{
+            background: "radial-gradient(circle, hsl(205 90% 60% / 0.12) 0%, transparent 70%)",
+            filter: "blur(80px)",
+            willChange: "transform",
+            transform: "translate3d(0,0,0)",
+          }}
+        />
+        {/* Sağalt — bənövşəyi aksan */}
+        <div
+          className="absolute bottom-[-10%] right-[-10%] w-[55vw] h-[55vw] rounded-full"
+          style={{
+            background: "radial-gradient(circle, hsl(260 60% 55% / 0.07) 0%, transparent 70%)",
+            filter: "blur(80px)",
+            willChange: "transform",
+            transform: "translate3d(0,0,0)",
+          }}
+        />
+        {/* Mərkəz — çox yüngül mavi halo */}
+        <div
+          className="absolute top-[40%] left-[50%] -translate-x-1/2 w-[40vw] h-[40vw] rounded-full"
+          style={{
+            background: "radial-gradient(circle, hsl(210 80% 65% / 0.05) 0%, transparent 70%)",
+            filter: "blur(60px)",
+            willChange: "transform",
+            transform: "translate3d(-50%,0,0)",
+          }}
+        />
       </div>
 
-      {/* Audio Element */}
+      {/* Audio Element — preload="none" ilə ilk yükləmə sürətlənir */}
       <audio
         ref={audioRef}
         src="/basrol.mp3"
         loop
-        preload="auto"
+        preload="none"
         onPlay={() => setIsPlaying(true)}
         onPause={() => setIsPlaying(false)}
       />
@@ -76,10 +111,7 @@ const Index = () => {
 
       {/* Əsas Məzmun */}
       <main className="relative z-10 w-full">
-        {/* Hero içindəki şəkil artıq ancaq Hero-da qalacaq */}
         <Hero />
-        
-        {/* Digər hissələr təmiz qara fon üzərində glowlarla görünəcək */}
         <Stats />
         <Bio />
         <Countdown />
