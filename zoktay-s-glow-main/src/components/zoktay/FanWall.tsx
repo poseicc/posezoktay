@@ -60,16 +60,14 @@ const FanWall = () => {
   };
 
   return (
-    <section id="fanwall" className="relative px-4 py-24 sm:py-32 overflow-hidden bg-[#0a0a0a]">
-      
-      {/* Arxa plan gradienti */}
-      <div className="absolute inset-0 bg-gradient-to-b from-zinc-950 via-zinc-900 to-[#0a0a0a]" />
-      
-      {/* Yüngül mavi toxunuş */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,#3b82f620_0%,transparent_60%)]" />
+    /*
+      ÖNCƏKİ: 2 ayrı arxa plan div (gradient + mavi glow)
+      İNDİ: section-bg class → eyni effekt, 0 əlavə DOM element
+    */
+    <section id="fanwall" className="section-bg px-4 py-24 sm:py-32">
 
       <div className="relative z-10 mx-auto max-w-6xl">
-        
+
         {/* Başlıq */}
         <div className="mb-12 text-center">
           <p className="mb-2 font-body text-[10px] uppercase tracking-[0.6em] text-[hsl(var(--love-sky)/0.7)]">
@@ -95,7 +93,7 @@ const FanWall = () => {
             maxLength={32}
             className="w-full rounded-2xl border border-[hsl(var(--love-mist)/0.12)] bg-white/5 px-5 py-3.5 font-body text-sm text-white placeholder:text-[hsl(var(--love-mist)/0.4)] outline-none transition focus:border-[hsl(var(--love-sky)/0.5)]"
           />
-          
+
           <textarea
             value={text}
             onChange={(e) => setText(e.target.value)}
@@ -132,11 +130,11 @@ const FanWall = () => {
                 </span>
                 <Heart className="h-4 w-4 text-pink-400" fill="currentColor" />
               </div>
-              
+
               <p className="font-body text-[15px] leading-relaxed text-[hsl(var(--love-mist)/0.85)]">
                 {m.message}
               </p>
-              
+
               <p className="mt-5 text-[10px] uppercase tracking-widest text-[hsl(var(--love-mist)/0.4)]">
                 {new Date(m.ts).toLocaleDateString("az-AZ", {
                   day: "2-digit",
