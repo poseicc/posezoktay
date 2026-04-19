@@ -15,16 +15,15 @@ const Bio = () => {
   ];
 
   return (
-    <section id="bio" className="relative py-24 sm:py-32 overflow-hidden bg-[#0a0a0a]">
-      
-      {/* Arxa plan gradienti - FanWall və Countdown ilə eyni stil */}
-      <div className="absolute inset-0 bg-gradient-to-b from-zinc-950 via-zinc-900 to-[#0a0a0a]" />
-      
-      {/* Yüngül noise / texture effekti */}
-      <div className="absolute inset-0 opacity-20 bg-[radial-gradient(#ffffff_0.8px,transparent_1px)] bg-[length:40px_40px]" />
+    /*
+      ÖNCƏKİ: 3 ayrı arxa plan div-i (gradient + noise + əsas rəng)
+      İNDİ: section-bg class → CSS ::before / ::after pseudo-elementləri
+      Eyni görünüş, 2 az DOM elementi, sıfır inline style
+    */
+    <section id="bio" className="section-bg py-24 sm:py-32">
 
       <div className="relative z-10 mx-auto max-w-6xl px-4">
-        
+
         {/* Başlıq hissəsi */}
         <div className="mb-14 text-center">
           <p className="mb-2 font-body text-[10px] uppercase tracking-[0.6em] text-[hsl(var(--love-sky)/0.7)]">
@@ -49,13 +48,13 @@ const Bio = () => {
               <div className="absolute right-5 top-5 font-display text-3xl italic text-[hsl(var(--love-sky)/0.25)] sm:text-4xl">
                 0{i + 1}
               </div>
-              
+
               <h3 className="font-display text-3xl italic text-[hsl(var(--love-mist))] sm:text-4xl">
                 {c.title}
               </h3>
-              
+
               <div className="my-5 h-px w-12 bg-gradient-soft opacity-60" />
-              
+
               <p className="font-body text-sm font-light leading-relaxed text-[hsl(var(--love-mist)/0.85)] sm:text-base">
                 {c.body}
               </p>
