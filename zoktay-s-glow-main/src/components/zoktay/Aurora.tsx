@@ -1,72 +1,89 @@
 /**
- * Aurora — Highly optimized GPU-accelerated blurred orbs.
- * - Added will-change for hardware acceleration.
- * - Simplified gradients to reduce fragment shader load.
- * - Used backface-visibility to force layer promotion.
+ * Aurora — GPU-accelerated ambient glow orbs.
+ * Bütün səhifə üçün vahid arxa plan effekti.
+ * Bio, Stats, Countdown, FanWall heç bir arxa plan div daşımır —
+ * bütün glowlar buradan gəlir.
  */
 const Aurora = () => {
-  const commonStyle: React.CSSProperties = {
+  const base: React.CSSProperties = {
     position: "absolute",
     borderRadius: "50%",
-    filter: "blur(60px)", // Blur dərəcəsini bir az azaltdıq (performans üçün)
     willChange: "transform, opacity",
     backfaceVisibility: "hidden",
-    transform: "translateZ(0)", // GPU-nu aktivləşdirir
+    transform: "translateZ(0)",
+    pointerEvents: "none",
   };
 
   return (
     <div
       aria-hidden
-      className="pointer-events-none fixed inset-0 z-[1] overflow-hidden"
+      className="pointer-events-none fixed inset-0 overflow-hidden"
+      style={{ zIndex: 1 }}
     >
-      {/* Orb A */}
+      {/* Orb A — Sol üst, ana mavi glow */}
       <div
-        className="aurora opacity-50"
         style={{
-          ...commonStyle,
-          top: "-5%",
+          ...base,
+          top: "-10%",
           left: "-5%",
-          width: "50vw",
-          height: "50vw",
-          background: "radial-gradient(circle, hsl(var(--love-sky) / 0.5), transparent 70%)",
-          animation: "aurora-drift-a 25s ease-in-out infinite",
+          width: "65vw",
+          height: "65vw",
+          background: "radial-gradient(circle, hsl(205 90% 65% / 0.22) 0%, transparent 65%)",
+          filter: "blur(55px)",
+          animation: "aurora-drift-a 22s ease-in-out infinite",
         }}
       />
 
-      {/* Orb B */}
+      {/* Orb B — Sağ orta, azure glow */}
       <div
-        className="aurora opacity-40"
         style={{
-          ...commonStyle,
-          top: "25%",
+          ...base,
+          top: "30%",
           right: "-10%",
+          width: "60vw",
+          height: "60vw",
+          background: "radial-gradient(circle, hsl(215 75% 60% / 0.16) 0%, transparent 65%)",
+          filter: "blur(60px)",
+          animation: "aurora-drift-b 28s ease-in-out infinite",
+        }}
+      />
+
+      {/* Orb C — Aşağı sol, çəhrayı/bənövşəyi aksan */}
+      <div
+        style={{
+          ...base,
+          bottom: "-5%",
+          left: "10%",
           width: "55vw",
           height: "55vw",
-          background: "radial-gradient(circle, hsl(var(--love-azure) / 0.4), transparent 70%)",
-          animation: "aurora-drift-b 30s ease-in-out infinite",
+          background: "radial-gradient(circle, hsl(260 60% 60% / 0.10) 0%, transparent 65%)",
+          filter: "blur(65px)",
+          animation: "aurora-drift-c 32s ease-in-out infinite",
         }}
       />
 
-      {/* Orb C */}
+      {/* Orb D — Mərkəz sabit halo (animasiyasız, yüngül) */}
       <div
-        className="aurora opacity-20"
         style={{
-          ...commonStyle,
-          bottom: "-10%",
-          left: "15%",
+          ...base,
+          top: "45%",
+          left: "50%",
+          transform: "translate(-50%, -50%) translateZ(0)",
           width: "50vw",
           height: "50vw",
-          background: "radial-gradient(circle, hsl(var(--love-rose) / 0.25), transparent 70%)",
-          animation: "aurora-drift-c 35s ease-in-out infinite",
+          background: "radial-gradient(circle, hsl(205 90% 70% / 0.06) 0%, transparent 70%)",
+          filter: "blur(70px)",
         }}
       />
 
-      {/* Optimized Static Vignette */}
+      {/* Vignette — kənarları qaraldır */}
       <div
-        className="absolute inset-0 z-[2]"
         style={{
-          background: "radial-gradient(circle at center, transparent 50%, hsl(var(--love-deep) / 0.4) 100%)",
+          position: "absolute",
+          inset: 0,
+          background: "radial-gradient(ellipse at center, transparent 45%, hsl(222 45% 4% / 0.5) 100%)",
           pointerEvents: "none",
+          zIndex: 2,
         }}
       />
     </div>
